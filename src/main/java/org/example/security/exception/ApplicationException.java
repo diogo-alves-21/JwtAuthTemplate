@@ -11,5 +11,4 @@ public class ApplicationException extends RuntimeException {
         super(error.getErrorMessage());
         this.error = error;
     }
-
 }

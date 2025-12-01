@@ -1,12 +1,11 @@
 package org.example.security.auth.config;
 
+import java.util.List;
 import org.example.security.user.User;
 import org.example.security.user.UserRepository;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-
-import java.util.List;
 
 @EnableScheduling
 @Configuration

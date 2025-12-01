@@ -1,8 +1,15 @@
 package org.example.security.auth.service;
 
+import static org.example.security.exception.ApplicationExceptionCode.*;
+
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
+import java.util.Base64;
+import java.util.List;
+import java.util.Optional;
 import org.example.security.auth.dto.*;
 import org.example.security.auth.model.Token;
 import org.example.security.auth.repository.TokenRepository;
@@ -15,14 +22,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.security.SecureRandom;
-import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
-
-import static org.example.security.exception.ApplicationExceptionCode.*;
 
 @Service
 public class AuthenticationService {
@@ -40,8 +39,8 @@ public class AuthenticationService {
     private final EmailService emailService;
 
     public AuthenticationService(UserRepository userRepository, AuthenticationManager authenticationManager,
-                                 PasswordEncoder passwordEncoder, TokenRepository tokenRepository, JwtService jwtService,
-                                 EmailService emailService) {
+            PasswordEncoder passwordEncoder, TokenRepository tokenRepository, JwtService jwtService,
+            EmailService emailService) {
 
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
@@ -68,24 +67,15 @@ public class AuthenticationService {
 
         user = userRepository.save(user);
 
-        return UserResponseDto.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .role(user.getRole())
-                .build();
+        return UserResponseDto.builder().id(user.getId()).email(user.getEmail()).firstName(user.getFirstName())
+                .lastName(user.getLastName()).role(user.getRole()).build();
     }
 
     @Transactional
     public TokenResponseDto authenticate(LoginUserDto loginUserDto) {
 
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginUserDto.getEmail(),
-                        loginUserDto.getPassword()
-                )
-        );
+                new UsernamePasswordAuthenticationToken(loginUserDto.getEmail(), loginUserDto.getPassword()));
 
         User user = userRepository.findByEmail(loginUserDto.getEmail())
                 .orElseThrow(() -> new ApplicationException(USER_NOT_FOUND));
@@ -95,10 +85,7 @@ public class AuthenticationService {
         revokeAllTokenByUser(user);
         saveUserToken(accessToken, refreshToken, user);
 
-        return TokenResponseDto.builder()
-                .accessToken(accessToken)
-                .expiresAt(jwtService.getExpirationTime())
-                .build();
+        return TokenResponseDto.builder().accessToken(accessToken).expiresAt(jwtService.getExpirationTime()).build();
     }
 
     public TokenResponseDto refreshToken(HttpServletRequest request) {
@@ -114,10 +101,9 @@ public class AuthenticationService {
 
         String email = jwtService.extractUsername(token);
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ApplicationException(USER_NOT_FOUND));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ApplicationException(USER_NOT_FOUND));
 
-        if(jwtService.isTokenValid(token, user)) {
+        if (jwtService.isValidRefreshToken(token, user)) {
 
             String accessToken = jwtService.generateToken(user);
             String refreshToken = jwtService.generateRefreshToken(user);
@@ -125,21 +111,17 @@ public class AuthenticationService {
             revokeAllTokenByUser(user);
             saveUserToken(accessToken, refreshToken, user);
 
-            return TokenResponseDto.builder()
-                    .refreshToken(refreshToken)
-                    .expiresAt(jwtService.getRefreshExpirationTime())
-                    .build();
+            return TokenResponseDto.builder().accessToken(accessToken).refreshToken(refreshToken)
+                    .expiresAt(jwtService.getRefreshExpirationTime()).build();
         }
 
         throw new ApplicationException(REFRESH_TOKEN_INVALID);
-
     }
 
     @Transactional
     public void processPasswordReset(String email) throws MessagingException {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ApplicationException(USER_NOT_FOUND));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ApplicationException(USER_NOT_FOUND));
 
         String token = createResetPasswordToken();
 
@@ -147,7 +129,7 @@ public class AuthenticationService {
         user.setResetPasswordExpiresAt(LocalDateTime.now().plusMinutes(30));
         userRepository.save(user);
 
-        emailService.sendEmail(email,token);
+        emailService.sendEmail(email, token);
     }
 
     public void validatePasswordResetToken(String token) {
@@ -181,11 +163,11 @@ public class AuthenticationService {
 
         List<Token> validTokens = tokenRepository.findAllAccessTokensByUser(user.getId());
 
-        if(validTokens.isEmpty()) {
+        if (validTokens.isEmpty()) {
             return;
         }
 
-        validTokens.forEach(t-> t.setLoggedOut(true));
+        validTokens.forEach(t -> t.setLoggedOut(true));
         tokenRepository.saveAll(validTokens);
     }
 
@@ -208,5 +190,4 @@ public class AuthenticationService {
         Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
         return encoder.encodeToString(randomBytes);
     }
-
 }

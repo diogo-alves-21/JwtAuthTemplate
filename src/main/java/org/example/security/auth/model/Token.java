@@ -2,10 +2,9 @@ package org.example.security.auth.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import java.util.UUID;
 import lombok.Data;
 import org.example.security.user.User;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "tokens")

@@ -1,5 +1,7 @@
 package org.example.security.auth.config;
 
+import static org.example.security.exception.ApplicationExceptionCode.USER_NOT_FOUND;
+
 import org.example.security.exception.ApplicationException;
 import org.example.security.user.UserRepository;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +13,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import static org.example.security.exception.ApplicationExceptionCode.USER_NOT_FOUND;
 
 @Configuration
 public class ApplicationConfiguration {
@@ -37,8 +37,7 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-            throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 
         return config.getAuthenticationManager();
     }
@@ -52,4 +51,3 @@ public class ApplicationConfiguration {
         return authProvider;
     }
 }
-

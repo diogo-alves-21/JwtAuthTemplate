@@ -1,13 +1,14 @@
 package org.example.security.exception;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ApplicationExceptionCode {
-
     USER_NOT_FOUND(1001, "This user does not exist", HttpStatus.NOT_FOUND),
     USER_ALREADY_EXIST(1002, "This user already exists", HttpStatus.CONFLICT),
     ACCESS_DENIED(1003, "Access denied", HttpStatus.FORBIDDEN),

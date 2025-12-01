@@ -11,16 +11,12 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<?> handleApplicationException(ApplicationException exception) {
 
-        return  ResponseEntity
-                .status(exception.getError().getHttpStatus())
-                .body(exception.getError());
+        return ResponseEntity.status(exception.getError().getHttpStatus()).body(exception.getError());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleOverallException(Exception exception) {
 
-        return  ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
     }
 }

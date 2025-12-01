@@ -1,11 +1,10 @@
 package org.example.security.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.security.user.Role;
-
-import java.util.UUID;
 
 @Getter
 @Builder

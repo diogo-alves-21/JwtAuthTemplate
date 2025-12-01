@@ -29,8 +29,7 @@ public class CustomLogoutHandler implements LogoutHandler {
 
         String token = header.substring(7);
 
-        Token storedToken = tokenRepository.findByAccessToken(token)
-                .orElse(null);
+        Token storedToken = tokenRepository.findByAccessToken(token).orElse(null);
 
         if (storedToken != null) {
 

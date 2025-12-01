@@ -9,5 +9,4 @@ class JwtAuthTemplateApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

@@ -9,5 +9,4 @@ public class JwtAuthTemplateApplication {
     static void main(String[] args) {
         SpringApplication.run(JwtAuthTemplateApplication.class, args);
     }
-
 }
