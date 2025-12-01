@@ -1,0 +1,34 @@
+version: "3.9"
+name: "jwt"
+
+services:
+  db:
+    image: postgres:latest
+    container_name: java_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: jwtAppDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ..:/workspace
+
+  #app:
+  #  build:
+  #    context: ../
+  #    dockerfile: .devcontainer/Dockerfile
+  #  container_name: jwt_app
+  #  depends_on:
+  #    - db
+  #  environment:
+  #   SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/jwtAppDb
+  #   SPRING_DATASOURCE_USERNAME: postgres
+  #  SPRING_DATASOURCE_PASSWORD: postgres
+  #  ports:
+  #    - "8080:8080"
+  #  command: ["java", "-jar", "app.jar"]
+
+#volumes:
+#  postgres-data:
