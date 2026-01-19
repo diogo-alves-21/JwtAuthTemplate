@@ -4,15 +4,15 @@ A robust, production-ready JWT authentication system built with Spring Boot 3.5,
 
 ## 🚀 Features
 
-- 🔐 **JWT Authentication** - Secure token-based authentication with access and refresh tokens
-- 👤 **User Management** - User registration, login, and profile management
-- 🔑 **Password Reset** - Secure password reset functionality via email
-- 📧 **Email Integration** - SMTP-based email service for password resets
-- 🔄 **Token Refresh** - Automatic token refresh mechanism
-- 🗄️ **PostgreSQL Database** - Robust data persistence with JPA/Hibernate
-- 🔒 **Security Best Practices** - CORS, CSRF protection, secure headers
-- ✅ **Input Validation** - Comprehensive validation using Bean Validation
-- 📝 **Transaction Management** - Proper database transaction handling
+-  **JWT Authentication** - Secure token-based authentication with access and refresh tokens
+-  **User Management** - User registration, login, and profile management
+-  **Password Reset** - Secure password reset functionality via email
+-  **Email Integration** - SMTP-based email service for password resets
+-  **Token Refresh** - Automatic token refresh mechanism
+- ️ **PostgreSQL Database** - Robust data persistence with JPA/Hibernate
+-  **Security Best Practices** - CORS, CSRF protection, secure headers
+-  **Input Validation** - Comprehensive validation using Bean Validation
+-  **Transaction Management** - Proper database transaction handling
 
 ## 🏗️ Architecture
 
